@@ -208,3 +208,5 @@ __marimo__/
 
 # Ignore local html file manually downloaded from strava
 Dashboard_Strava.html
+
+.idea/

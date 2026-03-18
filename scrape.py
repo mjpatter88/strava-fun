@@ -18,7 +18,12 @@ def parse(soup):
                 activities.append(Activity(entry))
 
     print(f"found: {len(activities)} activities")
-    print(f"name: {activities[-1].athlete_name}, id: {activities[-1].athlete_id}")
+    print("\n**** Last Activity *****")
+    last_activity = activities[-1]
+    print(f"name: {last_activity.athlete_name}, id: {last_activity.athlete_id}")
+    print(f"distance: {last_activity.distance} {last_activity.distance_unit}")
+    print(f"time: {last_activity.time} {last_activity.time_unit}")
+    print(f"pace: {last_activity.pace} {last_activity.pace_unit}")
 
 
 def run_local():
