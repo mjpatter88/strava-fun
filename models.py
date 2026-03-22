@@ -22,7 +22,8 @@ class Activity:
             self.distance = distance_div.contents[0]
             self.distance_unit = distance_div.contents[1].attrs['title']
         else:
-            print("Distance span not found")
+            # print("Distance span not found")
+            pass
 
         pace_span = activity_block.find("span", string="Pace")
         if pace_span:
@@ -32,7 +33,8 @@ class Activity:
             self.pace = pace_div.contents[0]
             self.pace_unit = pace_div.contents[1].attrs['title']
         else:
-            print("Pace span not found")
+            # print("Pace span not found")
+            pass
 
         time_span = activity_block.find("span", string="Time")
         if time_span:
@@ -42,7 +44,10 @@ class Activity:
             self.time = time_div.contents[0]
             self.time_unit = time_div.contents[1].attrs['title']
         else:
-            print("Time span not found")
+            # print("Time span not found")
+            pass
 
         # can find by the title under the svg with "testid: activity-icon"
+        # reference how it is done here
+        # https://github.com/terrettaz/strava-tools/blob/master/stravatools/scraper.py#L198
         self.type = "foo"

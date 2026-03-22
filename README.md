@@ -9,5 +9,10 @@ Have fun with strava data
 * `poetry run python scrape.py`
 
 ## Run tests
-`poetry run pytest`
-`poetry run ptw .`
+* `poetry run pytest`
+* `poetry run ptw .`
+
+## Things to do
+* Parse activity type
+* Login/session support
+* Get activity details (including geometry)

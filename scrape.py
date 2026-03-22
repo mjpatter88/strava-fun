@@ -13,7 +13,7 @@ def parse(soup):
     for child in feed.contents:
         if child.contents:
             entry = child.contents[0]
-            # some feed entries aren't actually activites (like joining a challenge)
+            # some feed entries aren't actually activities (like joining a challenge)
             if entry.find(attrs={"data-testid": "activity_entry_container"}):
                 activities.append(Activity(entry))
 
