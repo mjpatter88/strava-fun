@@ -73,10 +73,6 @@ def run_scrape():
 
 
 if __name__ == "__main__":
-    # Comment/uncomment one of the following two lines.
-    # - run_scrape will login and get the dashboard html.
-    # - run_local will parse the already downloaded html.
-    # Probably you want to first run the scrape and then run local.
-
-    # run_scrape()
+    # Comment out the following line if you don't need to re-scrape the html
+    run_scrape()
     run_local()
