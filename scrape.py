@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import requests
 
 from models import Activity
 
@@ -32,8 +33,49 @@ def run_local():
     parse(soup)
 
 
+def login(email:str, password:str, session:requests.Session):
+    print(f"logging in as {email}.")
+    # url = "https://www.strava.com/login"
+    # response = session.get(url)
+    # soup = BeautifulSoup(response.content, 'html.parser')
+    # utf8 = soup.find_all('input',
+    #                      {'name': 'utf8'})[0].get('value').encode('utf-8')
+    # token = soup.find_all('input',
+    #                       {'name': 'authenticity_token'})[0].get('value')
+    login_data = {
+        # 'utf8': utf8,
+        # 'authenticity_token': token,
+        # 'plan': "",
+        'auth_version': 'v2',
+        'remember_me': 'on',
+        'email': email,
+        'password': password
+    }
+    # print(login_data)
+    HEADERS = {'User-Agent': 'strava-fun'}
+    response = session.post("https://www.strava.com/session", data=login_data, headers=HEADERS)
+    response.raise_for_status()
+    print(response.history)
+    print(response.history[0].text)
+    with open("session.html", "w") as f:
+        f.write(response.text)
+
+    response = session.get("https://www.strava.com/dashboard", headers=HEADERS)
+    response.raise_for_status()
+    print(response.status_code)
+    print(response.history)
+    print(response.history[0].text)
+    # print(response.text)
+    with open("dashboard.html", "w") as f:
+        f.write(response.text)
+    # assert ("<h2>Activity Feed</h2>" in response.content)
+
+
 def run_scrape():
-    print("hello")
+    session = requests.Session()
+    email = input("Enter your email: ")
+    password = input("Enter your password: ")
+    login(email, password, session)
 
 
 if __name__ == "__main__":
