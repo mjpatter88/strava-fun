@@ -1,3 +1,4 @@
+from getpass import getpass
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
@@ -38,7 +39,7 @@ def run_local():
 
 def run_scrape():
     email = input("Enter your email: ")
-    password = input("Enter your password: ")
+    password = getpass(prompt="Enter your password: ")
 
     with sync_playwright() as p:
         # browser = p.chromium.launch()
