@@ -72,6 +72,10 @@ def run_scrape():
 
 
 if __name__ == "__main__":
-    run_local()
-    # Uncomment the following line to login and scrape strava
+    # Comment/uncomment one of the following two lines.
+    # - run_scrape will login and get the dashboard html.
+    # - run_local will parse the already downloaded html.
+    # Probably you want to first run the scrape and then run local.
+
     # run_scrape()
+    run_local()
