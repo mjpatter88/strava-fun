@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import requests
+from playwright.sync_api import sync_playwright
 
 from models import Activity
 
@@ -28,56 +28,50 @@ def parse(soup):
 
 
 def run_local():
-    with open("Dashboard_Strava.html") as html_doc:
-        soup = BeautifulSoup(html_doc, "html.parser")
+    try:
+        with open("dashboard.html") as html_doc:
+            soup = BeautifulSoup(html_doc, "html.parser")
+    except FileNotFoundError:
+        print("No dashboard.html found. Please run scrape first.")
+        exit()
     parse(soup)
 
-
-def login(email:str, password:str, session:requests.Session):
-    print(f"logging in as {email}.")
-    # url = "https://www.strava.com/login"
-    # response = session.get(url)
-    # soup = BeautifulSoup(response.content, 'html.parser')
-    # utf8 = soup.find_all('input',
-    #                      {'name': 'utf8'})[0].get('value').encode('utf-8')
-    # token = soup.find_all('input',
-    #                       {'name': 'authenticity_token'})[0].get('value')
-    login_data = {
-        # 'utf8': utf8,
-        # 'authenticity_token': token,
-        # 'plan': "",
-        'auth_version': 'v2',
-        'remember_me': 'on',
-        'email': email,
-        'password': password
-    }
-    # print(login_data)
-    HEADERS = {'User-Agent': 'strava-fun'}
-    response = session.post("https://www.strava.com/session", data=login_data, headers=HEADERS)
-    response.raise_for_status()
-    print(response.history)
-    print(response.history[0].text)
-    with open("session.html", "w") as f:
-        f.write(response.text)
-
-    response = session.get("https://www.strava.com/dashboard", headers=HEADERS)
-    response.raise_for_status()
-    print(response.status_code)
-    print(response.history)
-    print(response.history[0].text)
-    # print(response.text)
-    with open("dashboard.html", "w") as f:
-        f.write(response.text)
-    # assert ("<h2>Activity Feed</h2>" in response.content)
-
-
 def run_scrape():
-    session = requests.Session()
     email = input("Enter your email: ")
     password = input("Enter your password: ")
-    login(email, password, session)
+
+    with sync_playwright() as p:
+        # browser = p.chromium.launch()
+        browser = p.chromium.launch(headless=False, slow_mo=50)
+        page = browser.new_page()
+        page.goto("https://www.strava.com/login")
+
+        # accept cookies
+        page.get_by_role("button", name="OK").click()
+
+        # enter email and click
+        page.get_by_role("textbox", name="Email").fill(email)
+        page.get_by_role("button", name="Log in").click()
+
+        # use a password
+        page.get_by_role("button", name="Use password instead").click()
+        page.get_by_role("textbox", name="Password").fill(password)
+        page.get_by_role("button", name="Log in").click()
+
+        # Make sure we redirect to the dashboard
+        page.wait_for_url("**/dashboard")
+
+        # Reload the dashboard with 50 entries
+        page.goto("https://www.strava.com/dashboard?num_entries=50")
+        page.wait_for_timeout(10000)
+
+        # for testing/development purposes, write the html to a file to minimize scraping
+        with open("dashboard.html", "w") as f:
+            f.write(page.content())
+        browser.close()
 
 
 if __name__ == "__main__":
     run_local()
+    # Uncomment the following line to login and scrape strava
     # run_scrape()

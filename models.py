@@ -23,7 +23,8 @@ class Activity:
             self.distance_unit = distance_div.contents[1].attrs['title']
         else:
             # print("Distance span not found")
-            pass
+            self.distance = None
+            self.distance_unit = None
 
         pace_span = activity_block.find("span", string="Pace")
         if pace_span:
@@ -34,7 +35,8 @@ class Activity:
             self.pace_unit = pace_div.contents[1].attrs['title']
         else:
             # print("Pace span not found")
-            pass
+            self.pace = None
+            self.pace_unit = None
 
         time_span = activity_block.find("span", string="Time")
         if time_span:
@@ -45,7 +47,8 @@ class Activity:
             self.time_unit = time_div.contents[1].attrs['title']
         else:
             # print("Time span not found")
-            pass
+            self.time = None
+            self.time_unit = None
 
         # can find by the title under the svg with "testid: activity-icon"
         # reference how it is done here

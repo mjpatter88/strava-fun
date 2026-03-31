@@ -2,10 +2,13 @@
 Have fun with strava data
 
 ## Run local
-* Manually download dashbaord html as `Dashboard_Strava.html`
+* First follow the "Run Scrape" step to get a scrape.
+* Then update commented out line in scrape.py main to `run_local()`.
 * `poetry run python scrape.py`
 
-## Run Scrape (not yet implemented)
+## Run Scrape
+* `poetry run playwright install chromium`
+* Update commented out line in scrape.py main to `run_scrape()`.
 * `poetry run python scrape.py`
 
 ## Run tests
@@ -14,5 +17,4 @@ Have fun with strava data
 
 ## Things to do
 * Parse activity type
-* Login/session support
 * Get activity details (including geometry)
